@@ -29,11 +29,11 @@ function CsvTable() {
             <Table bordered>
             <thead>
                 <tr>
-                <th>S.No.</th>
-                <th>Name</th>
-                <th>Phone Number</th>
-                <th>Email</th>
-                <th>Website</th>
+                  <th>S.No.</th>
+                  <th>Name</th>
+                  <th>Phone Number</th>
+                  <th>Email</th>
+                  <th>Website</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,7 +51,7 @@ function CsvTable() {
             </tbody>
             </Table>
             <CSVLink {...csvReport} >
-                <Button  className='csv-button'>Export to CSV</Button>
+                <Button className="float-right" color='primary'>Export to CSV</Button>
             </CSVLink>
         </Container>
     </div>
