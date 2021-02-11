@@ -32,9 +32,9 @@ function CsvTable() {
       };
   return (
     <div className='text-center'>
-       <Container> 
+       <Container fluid> 
            <h1  className='my-4'>CSV TABLE</h1>
-            <Table bordered>
+            <Table bordered responsive>
             <thead>
                 <tr>
                   <th>S.No.</th>
