@@ -2,14 +2,22 @@ import React,{useEffect, useState} from 'react';
 import { Container,Table,Button } from 'reactstrap';
 import { CSVLink } from "react-csv";
 import './style/CsvTable.css'
+const axios = require('axios');
 
 function CsvTable() {
 
-    const [csvData,setCsvData]=useState('')
+    const [csvData,setCsvData] = useState('')
+    const [data,setData] = useState([])
+    const url = "http://www.tpd-viewer.com/replay_stream?port=23456&addr=%2280.90.100.110%22"
     useEffect(()=>{
-            fetch('https://jsonplaceholder.typicode.com/users')
-            .then(res=> res.json())
-            .then(data=>setCsvData(data))
+        console.log('hello')
+        axios.get(url).then(function(response){
+          console.log(response)
+        })
+        .catch(function(error){
+            alert(error.message);
+        })
+            
     },[])
       const headers = [
         { label: "Name", key: "name" },
@@ -30,21 +38,46 @@ function CsvTable() {
             <thead>
                 <tr>
                   <th>S.No.</th>
-                  <th>Name</th>
-                  <th>Phone Number</th>
-                  <th>Email</th>
-                  <th>Website</th>
+                  <th>Age</th>
+                  <th>class</th>
+                  <th>code</th>
+                  <th>country</th>
+                  <th>distance</th>
+                  <th>ground</th>
+                  <th>obstacle</th>
+                  <th>off_timestamp</th>
+                  <th>pa_meeting</th>
+                  <th>pa_race</th>
+                  <th>post_time</th>
+                  <th>race_type</th>
+                  <th>racecourse</th>
+                  <th>sc</th>
+                  <th>surface</th>
+                  <th>win_time</th>
                 </tr>
             </thead>
             <tbody>
-                    {csvData && csvData.map((items,index)=>{
+                    {data.length > 0 && data.map((items,index)=>{
                         return(
                         <tr>
                             <th scope="row">{index+1}</th>
-                            <td>{items.name}</td>
-                            <td>{items.phone}</td>
-                            <td>{items.email}</td>
-                            <td>{items.website}</td>
+                            <td>{items.age}</td>
+                            <td>{items.class}</td>
+                            <td>{items.code}</td>
+                            <td>{items.country}</td>
+                            <td>{items.distance}</td>
+                            <td>{items.ground}</td>
+                            <td>{items.obstacle}</td>
+                            <td>{items.off_timestamp}</td>
+                            <td>{items.pa_meeting}</td>
+                            <td>{items.pa_race}</td>
+                            <td>{items.post_time}</td>
+                            <td>{items.race_type}</td>
+                            <td>{items.racecourse}</td>
+                            <td>{items.sc}</td>
+                            <td>{items.surface}</td>
+                            <td>{items.win_time}</td>
+
                         </tr>
                         )
                     })}            
