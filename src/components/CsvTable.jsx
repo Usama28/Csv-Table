@@ -178,9 +178,22 @@ function CsvTable() {
                     })}            
             </tbody>
             </Table>
-            <CSVLink {...csvReport} >
-                <Button className="float-right" color='primary'>Export to CSV</Button>
-            </CSVLink>
+            <Row>
+              <Col xs="2">
+                <CSVLink {...csvReport} >
+                  <Button className="float-right" color='primary' block>Export to CSV</Button>
+                </CSVLink>
+              </Col>
+
+              <Col xs="2">
+                <Link to="/chart">
+                  <Button color="warning" block>View Chart</Button>
+                </Link>
+              </Col>
+            </Row>
+            
+
+            
         </Container>
     </div>
   );

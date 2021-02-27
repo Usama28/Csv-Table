@@ -1,11 +1,19 @@
 import React from 'react';
-import CsvTable from './components/CsvTable'
+import Login from './components/Login';
+import CSVTable from './components/CsvTable';
+import Chart from './components/Chart';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <CsvTable/>
-    </div>
+    <HashRouter>
+      <Switch>
+        <Route path="/table" exact={true} component={CSVTable}/>
+        <Route path="/chart" exact={true} component={Chart}/>
+        <Route path="/" component={Login}/>
+      </Switch>
+    </HashRouter>
+    
   );
 }
 
