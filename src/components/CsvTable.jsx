@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from 'react';
-import { Container,Table,Button, Row, Col } from 'reactstrap';
+import { Container,Table,Button, Row, Col ,Input} from 'reactstrap';
 import {Link} from 'react-router-dom'
 import { CSVLink } from "react-csv";
 import socketIO, { io, Socket } from "socket.io-client";
@@ -139,10 +139,47 @@ function CsvTable() {
            <Col xs="12">
               <h1 className='my-4'>CSV TABLE</h1>
            </Col>
-           <Col xs="12" className="mb-2">
+
+           <Col xs="12" >
+             <Row>
+               <Col md='6' >
+                  <div className='d-flex mb-4'>
+                    <Input type="text" id="user-name" placeholder="Username" className='mr-3'  />
+                    <Input type="text"  id="password-id" placeholder="Password" className=''/>
+                  </div>
+               
+               </Col>
+               <Col md='6'>
+                 <div className='d-flex mb-4'>
+                   <Button color="primary" outline className='mx-1' style={{width:'50%'}}>Connect</Button>
+                    <Button color="primary" outline className='mx-1' style={{width:'50%'}}>Get Racelist</Button>
+                 </div>
+               </Col>
+             </Row>
+
+             <Row>
+                <Col md='6'>
+                    <div className='mb-2'>
+                        <Input type="text" id="sharecode-id" placeholder="Sharecode" className='' />
+                    </div>
+                </Col>
+                <Col md='6'>
+                   <div className='d-flex mb-2'>
+                        <Button onClick={e => join_race()} className="mx-1" color="primary" style={{width:'40%'}}>Join Race</Button> 
+                        <Button onClick={e => join_all()} className="mx-1" color="primary" outline style={{width:'40%'}}>Join All Race</Button>
+                        <Button color="primary" outline className='mx-1' style={{width:'40%'}}>Disconnect</Button>
+                    </div>
+                </Col>
+             </Row>
+              
+           </Col>
+         
+
+           {/*prev code
+            <Col xs="12" className="mb-2 ">
              <Button onClick={e => join_race()} className="float-right ml-2" color="primary">Join Race</Button>
              <Button onClick={e => join_all()} className="float-right" color="primary" outline>Join All Race</Button>
-           </Col>
+           </Col> */}
 
          </Row>
            
