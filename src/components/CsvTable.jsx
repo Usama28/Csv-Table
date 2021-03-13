@@ -5,16 +5,35 @@ import { CSVLink } from "react-csv";
 import socketIO, { io, Socket } from "socket.io-client";
 const axios = require('axios');
 
+var socket;
 function CsvTable() {
 
     const [csvData,setCsvData] = useState('')
     const [data,setData] = useState([])
     const [str,SetStr] = useState(null)
-    var socket;
+    const [flag, setFlag] = useState(false);
+    
     var racelist = {};
     var _cookie = ["tpd_ws_io", null];
+
+
+    const handleConnect = (e) => {
+      e.preventDefault();
+      var username = document.getElementById('user-name').value;
+      var pwd = document.getElementById('password-id').value;
+
+      if(username === "" || pwd === "" ) {
+        alert("Username or password can't be empty");
+      }
+      else {
+        _connect(username, pwd);
+        
+      }
+    }
   
-    const _connect = () => {
+    const _connect = (username, pwd) => {
+      console.log(username)
+      document.getElementById('connect-btn').innerHTML = "Connecting...";
       socket = new io("wss://www.tpd-viewer.com",
                   {"withCredentials": true,
                   "path": "/xb_socket.io",
@@ -22,8 +41,8 @@ function CsvTable() {
                   "transportOptions":{
                     "polling": {
                       "extraHeaders": {
-                        "LoginAuth-User": "ws_test",
-                        "LoginAuth-Passwd": "ws_test"
+                        "LoginAuth-User": username,
+                        "LoginAuth-Passwd": pwd
                       }
                     }
                   }
@@ -33,7 +52,17 @@ function CsvTable() {
       socket.connect();
 
       socket.on('connect', function(msg) {
-        console.log(msg);
+
+        if(msg !== undefined) {
+          console.log("msg", msg)
+          setFlag(true);
+        }
+        else {
+          setFlag(false)
+          // alert("You are not connected")
+        }
+        
+        console.log(msg)
       });
   
       socket.on("get_racelist", function(msg) {
@@ -68,7 +97,8 @@ function CsvTable() {
       });
     }
     const emit = (name,data) =>  {
-      socket.emit(name, data);
+      console.log("socket",socket)
+      socket.emit(name, data);           
     }
   
     const send = (name) => {
@@ -80,20 +110,30 @@ function CsvTable() {
     }
   
     const get_racelist = (date) =>  {
-      emit("get_racelist", {"date": date});
+      console.log("flag", flag)
+      if(flag) {
+        emit("get_racelist", {"date": date});
+      }
+      else {
+        alert("You are not connected")
+      }
+      
     }
   
-    const join_race = (sc) => {
-      if (sc == null) {
-        let sc = document.getElementById("sharecode").value;
-      }
-      if (sc == null) {
-        console.log("No sharecode selected")
+    const join_race = () => {
+      let sc = document.getElementById("sharecode-id").value;
+      if (sc === "") {
         alert('No Share code Selected')
-        // document.getElementById("textdump").value = "No sharecode selected";
         return;
       }
-      emit("join_race", {"sc": sc});
+      // if (sc == null) {
+      //   console.log("No sharecode selected")
+      //   alert('No Share code Selected')
+      //   // document.getElementById("textdump").value = "No sharecode selected";
+      //   return;
+      // }
+      else 
+        emit("join_race", {"sc": sc});
     }
   
     const join_all = () => {
@@ -104,6 +144,7 @@ function CsvTable() {
   
     const disconnect = () => {
       socket.disconnect();
+      setFlag(false)
     }
   
   
@@ -117,8 +158,8 @@ function CsvTable() {
         // .catch(function(error){
         //     alert(error.message);
         // })
-        _connect()
-        get_racelist()
+        // _connect()
+       // get_racelist()
             
     },[])
       const headers = [
@@ -145,14 +186,14 @@ function CsvTable() {
                <Col md='6' >
                   <div className='d-flex mb-4'>
                     <Input type="text" id="user-name" placeholder="Username" className='mr-3'  />
-                    <Input type="text"  id="password-id" placeholder="Password" className=''/>
+                    <Input type="text"  id="password-id" placeholder="Password" />
                   </div>
                
                </Col>
                <Col md='6'>
                  <div className='d-flex mb-4'>
-                   <Button color="primary" outline className='mx-1' style={{width:'50%'}}>Connect</Button>
-                    <Button color="primary" outline className='mx-1' style={{width:'50%'}}>Get Racelist</Button>
+                   <Button color="primary" outline className='mx-1' style={{width:'50%'}} onClick={(e) => handleConnect(e)} id="connect-btn">{flag ? "Connected" : "Connect"}</Button>
+                    <Button color="primary" outline className='mx-1' style={{width:'50%'}} onClick={() => get_racelist()}>Get Racelist</Button>
                  </div>
                </Col>
              </Row>
@@ -167,7 +208,7 @@ function CsvTable() {
                    <div className='d-flex mb-2'>
                         <Button onClick={e => join_race()} className="mx-1" color="primary" style={{width:'40%'}}>Join Race</Button> 
                         <Button onClick={e => join_all()} className="mx-1" color="primary" outline style={{width:'40%'}}>Join All Race</Button>
-                        <Button color="primary" outline className='mx-1' style={{width:'40%'}}>Disconnect</Button>
+                        <Button color="primary" outline className='mx-1' style={{width:'40%'}} onClick={() => disconnect()}>Disconnect</Button>
                     </div>
                 </Col>
              </Row>
