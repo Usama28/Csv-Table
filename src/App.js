@@ -6,7 +6,7 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 
 function App() {
   return (
-    <HashRouter>
+    <HashRouter basename="/">
       <Switch>
         <Route path="/table" exact={true} component={CSVTable}/>
         <Route path="/chart" exact={true} component={Chart}/>
