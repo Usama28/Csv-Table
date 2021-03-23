@@ -32,7 +32,6 @@ function CsvTable() {
     }
   
     const _connect = (username, pwd) => {
-      console.log(username)
       document.getElementById('connect-btn').innerHTML = "Connecting...";
       socket = new io("wss://www.tpd-viewer.com",
                   {"withCredentials": true,
@@ -54,7 +53,6 @@ function CsvTable() {
       socket.on('connect', function(msg) {
 
         if(msg !== undefined) {
-          console.log("msg", msg)
           setFlag(true);
         }
         else {
@@ -62,11 +60,9 @@ function CsvTable() {
           // alert("You are not connected")
         }
         
-        console.log(msg)
       });
   
       socket.on("get_racelist", function(msg) {
-        console.log(msg);
         var arr = []
         let s = "";
         Object.keys(msg).forEach(function(key) {
@@ -95,10 +91,14 @@ function CsvTable() {
         console.log("pong");
         // document.getElementById("textdump").value = 'pong';
       });
+
+      socket.on("join_race", function(msg) {
+        console.log(msg);
+        // document.getElementById("textdump").value = 'pong';
+      });
     }
     const emit = (name,data) =>  {
-      console.log("socket",socket)
-      socket.emit(name, data);           
+      socket.emit(name, data);
     }
   
     const send = (name) => {
@@ -126,12 +126,6 @@ function CsvTable() {
         alert('No Share code Selected')
         return;
       }
-      // if (sc == null) {
-      //   console.log("No sharecode selected")
-      //   alert('No Share code Selected')
-      //   // document.getElementById("textdump").value = "No sharecode selected";
-      //   return;
-      // }
       else 
         emit("join_race", {"sc": sc});
     }
@@ -147,21 +141,7 @@ function CsvTable() {
       setFlag(false)
     }
   
-  
-
     const url = "http://www.tpd-viewer.com/replay_stream?port=23456&addr=%2280.90.100.110%22"
-    useEffect(()=>{
-        // console.log('hello')
-        // axios.get(url).then(function(response){
-        //   console.log(response)
-        // })
-        // .catch(function(error){
-        //     alert(error.message);
-        // })
-        // _connect()
-       // get_racelist()
-            
-    },[])
       const headers = [
         { label: "Name", key: "name" },
         { label: "Number", key: "phone" },
@@ -211,16 +191,8 @@ function CsvTable() {
                         <Button color="primary" outline className='mx-1' style={{width:'40%'}} onClick={() => disconnect()}>Disconnect</Button>
                     </div>
                 </Col>
-             </Row>
-              
+             </Row>   
            </Col>
-         
-
-           {/*prev code
-            <Col xs="12" className="mb-2 ">
-             <Button onClick={e => join_race()} className="float-right ml-2" color="primary">Join Race</Button>
-             <Button onClick={e => join_all()} className="float-right" color="primary" outline>Join All Race</Button>
-           </Col> */}
 
          </Row>
            
@@ -228,7 +200,7 @@ function CsvTable() {
             <thead>
                 <tr>
                   <th>S.No.</th>
-                  <th>I</th>
+                  <th>Share Code</th>
                   <th>PostTime</th>
                   <th>Published</th>
                   <th>Race Length</th>
